@@ -18,7 +18,8 @@
 @interface HHReadViewController ()
  
 @property (nonatomic, strong) UILabel *titleLabel;   /**< 用于显示书名或者章节名*/
-@property (nonatomic, strong) UILabel *pageLabel;
+@property (nonatomic, strong) UILabel *pageLabel;   /**< 用于显示每一章的当前页和总页数*/
+@property (nonatomic, strong) UILabel *sysTimeLabel;   /**< 用于显示系统时间*/
 
 @end
 
@@ -69,11 +70,19 @@
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.titleLabel];
     
-    self.pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.readView.frame), self.view.bounds.size.width - 40, 20)];
-    self.pageLabel.textAlignment = NSTextAlignmentLeft;
+    CGFloat pageLabelWidth = 80;
+    self.pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - pageLabelWidth - 20, CGRectGetMaxY(self.readView.frame), pageLabelWidth, 20)];
+    self.pageLabel.textAlignment = NSTextAlignmentRight;
     self.pageLabel.font = [UIFont systemFontOfSize:15];
     self.pageLabel.textColor = [UIColor blueColor];
     [self.view addSubview:self.pageLabel];
+    
+    self.sysTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.readView.frame), pageLabelWidth, 20)];
+    self.sysTimeLabel.textAlignment = NSTextAlignmentLeft;
+    self.sysTimeLabel.font = [UIFont systemFontOfSize:15];
+    self.sysTimeLabel.textColor = [UIColor blueColor];
+    [self.view addSubview:self.sysTimeLabel];
+    
 }
 
 #pragma mark -
@@ -105,8 +114,19 @@
     self.titleLabel.text = titleString;
     self.titleLabel.textColor = [HHReadConfig shareInstance].fontColor;
     self.pageLabel.text = [NSString stringWithFormat:@"%@ / %@", @(self.currentPage), @(currentChapterModel.chapterPageCount)];
+    
+    self.sysTimeLabel.text = [self getCurrentTime];
+    self.sysTimeLabel.textColor = [HHReadConfig shareInstance].fontColor;
     [self.view setNeedsDisplay];
 
+}
+
+- (NSString *)getCurrentTime {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm"];
+    NSDate *datenow = [NSDate date];
+    NSString *currentTimeString = [dateFormatter stringFromDate:datenow];
+    return currentTimeString;
 }
 
 #pragma mark -
