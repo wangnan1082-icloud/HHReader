@@ -16,7 +16,6 @@
 		B20EE94820B6AB3E0079B949 /* HHReadConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B20EE94720B6AB3E0079B949 /* HHReadConfig.m */; };
 		B21043B220AD6665009806FF /* 全职高手-精校.txt in Resources */ = {isa = PBXBuildFile; fileRef = B21043B120AD6665009806FF /* 全职高手-精校.txt */; };
 		B216558120A439CA00B9BC19 /* HHReadChapterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B216558020A439CA00B9BC19 /* HHReadChapterModel.m */; };
-		B220CC9620A528BB00577A5E /* 全职高手.txt in Resources */ = {isa = PBXBuildFile; fileRef = B220CC9520A528BB00577A5E /* 全职高手.txt */; };
 		B220CC9920A52E0800577A5E /* HHReadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B220CC9820A52E0800577A5E /* HHReadModel.m */; };
 		B220CC9C20A5306500577A5E /* HHReadTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B220CC9B20A5306500577A5E /* HHReadTool.m */; };
 		B236924A20BFE03000375E4E /* WifiUploadBookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B236924920BFE03000375E4E /* WifiUploadBookViewController.m */; };
@@ -32,13 +31,7 @@
 		B2F49F3620906A0B00D03620 /* HHReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F49F3520906A0B00D03620 /* HHReaderTests.m */; };
 		B2F49F4120906A0B00D03620 /* HHReaderUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F49F4020906A0B00D03620 /* HHReaderUITests.m */; };
 		B2F49F5120906AF100D03620 /* 嫌疑人X的献身.txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5020906AF100D03620 /* 嫌疑人X的献身.txt */; };
-		B2F49F5320906B3F00D03620 /* iOS 安全攻防 - v1.1.epub in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5220906B3F00D03620 /* iOS 安全攻防 - v1.1.epub */; };
-		B2F49F5A20906F9700D03620 /* 盗墓笔记第5卷 上蛇沼鬼城 .txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5420906F9600D03620 /* 盗墓笔记第5卷 上蛇沼鬼城 .txt */; };
 		B2F49F5B20906F9700D03620 /* 盗墓笔记第1卷 七星鲁王 .txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5520906F9600D03620 /* 盗墓笔记第1卷 七星鲁王 .txt */; };
-		B2F49F5C20906F9700D03620 /* 盗墓笔记第2卷 怒海潜沙 .txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5620906F9600D03620 /* 盗墓笔记第2卷 怒海潜沙 .txt */; };
-		B2F49F5D20906F9700D03620 /* 盗墓笔记第5卷 下谜海归巢 .txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5720906F9700D03620 /* 盗墓笔记第5卷 下谜海归巢 .txt */; };
-		B2F49F5E20906F9700D03620 /* 盗墓笔记第3卷 秦岭神树 .txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5820906F9700D03620 /* 盗墓笔记第3卷 秦岭神树 .txt */; };
-		B2F49F5F20906F9700D03620 /* 盗墓笔记第4卷 云顶天宫 .txt in Resources */ = {isa = PBXBuildFile; fileRef = B2F49F5920906F9700D03620 /* 盗墓笔记第4卷 云顶天宫 .txt */; };
 		B2F49F62209070F600D03620 /* HHReadPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F49F61209070F600D03620 /* HHReadPageViewController.m */; };
 		B2F49F652090773100D03620 /* HHReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F49F642090773100D03620 /* HHReadViewController.m */; };
 		FE1C95EC941481DE9ECA1A02 /* libPods-HHReader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EF041D1F7562B5A13191EF /* libPods-HHReader.a */; };
@@ -79,7 +72,6 @@
 		B21043B120AD6665009806FF /* 全职高手-精校.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "全职高手-精校.txt"; sourceTree = "<group>"; };
 		B216557F20A439CA00B9BC19 /* HHReadChapterModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadChapterModel.h; sourceTree = "<group>"; };
 		B216558020A439CA00B9BC19 /* HHReadChapterModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadChapterModel.m; sourceTree = "<group>"; };
-		B220CC9520A528BB00577A5E /* 全职高手.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "全职高手.txt"; sourceTree = "<group>"; };
 		B220CC9720A52E0800577A5E /* HHReadModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadModel.h; sourceTree = "<group>"; };
 		B220CC9820A52E0800577A5E /* HHReadModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadModel.m; sourceTree = "<group>"; };
 		B220CC9A20A5306500577A5E /* HHReadTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadTool.h; sourceTree = "<group>"; };
@@ -111,13 +103,7 @@
 		B2F49F4020906A0B00D03620 /* HHReaderUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReaderUITests.m; sourceTree = "<group>"; };
 		B2F49F4220906A0B00D03620 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2F49F5020906AF100D03620 /* 嫌疑人X的献身.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "嫌疑人X的献身.txt"; sourceTree = "<group>"; };
-		B2F49F5220906B3F00D03620 /* iOS 安全攻防 - v1.1.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iOS 安全攻防 - v1.1.epub"; sourceTree = "<group>"; };
-		B2F49F5420906F9600D03620 /* 盗墓笔记第5卷 上蛇沼鬼城 .txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "盗墓笔记第5卷 上蛇沼鬼城 .txt"; sourceTree = "<group>"; };
 		B2F49F5520906F9600D03620 /* 盗墓笔记第1卷 七星鲁王 .txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "盗墓笔记第1卷 七星鲁王 .txt"; sourceTree = "<group>"; };
-		B2F49F5620906F9600D03620 /* 盗墓笔记第2卷 怒海潜沙 .txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "盗墓笔记第2卷 怒海潜沙 .txt"; sourceTree = "<group>"; };
-		B2F49F5720906F9700D03620 /* 盗墓笔记第5卷 下谜海归巢 .txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "盗墓笔记第5卷 下谜海归巢 .txt"; sourceTree = "<group>"; };
-		B2F49F5820906F9700D03620 /* 盗墓笔记第3卷 秦岭神树 .txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "盗墓笔记第3卷 秦岭神树 .txt"; sourceTree = "<group>"; };
-		B2F49F5920906F9700D03620 /* 盗墓笔记第4卷 云顶天宫 .txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "盗墓笔记第4卷 云顶天宫 .txt"; sourceTree = "<group>"; };
 		B2F49F60209070F600D03620 /* HHReadPageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadPageViewController.h; sourceTree = "<group>"; };
 		B2F49F61209070F600D03620 /* HHReadPageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadPageViewController.m; sourceTree = "<group>"; };
 		B2F49F632090773100D03620 /* HHReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadViewController.h; sourceTree = "<group>"; };
@@ -269,15 +255,8 @@
 			isa = PBXGroup;
 			children = (
 				B21043B120AD6665009806FF /* 全职高手-精校.txt */,
-				B220CC9520A528BB00577A5E /* 全职高手.txt */,
 				B2F49F5520906F9600D03620 /* 盗墓笔记第1卷 七星鲁王 .txt */,
-				B2F49F5620906F9600D03620 /* 盗墓笔记第2卷 怒海潜沙 .txt */,
-				B2F49F5820906F9700D03620 /* 盗墓笔记第3卷 秦岭神树 .txt */,
-				B2F49F5920906F9700D03620 /* 盗墓笔记第4卷 云顶天宫 .txt */,
-				B2F49F5420906F9600D03620 /* 盗墓笔记第5卷 上蛇沼鬼城 .txt */,
-				B2F49F5720906F9700D03620 /* 盗墓笔记第5卷 下谜海归巢 .txt */,
 				B2F49F5020906AF100D03620 /* 嫌疑人X的献身.txt */,
-				B2F49F5220906B3F00D03620 /* iOS 安全攻防 - v1.1.epub */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -404,19 +383,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2F49F5C20906F9700D03620 /* 盗墓笔记第2卷 怒海潜沙 .txt in Resources */,
 				B2F49F2920906A0B00D03620 /* LaunchScreen.storyboard in Resources */,
 				B2F49F5120906AF100D03620 /* 嫌疑人X的献身.txt in Resources */,
-				B2F49F5320906B3F00D03620 /* iOS 安全攻防 - v1.1.epub in Resources */,
 				B2F49F2620906A0B00D03620 /* Assets.xcassets in Resources */,
-				B220CC9620A528BB00577A5E /* 全职高手.txt in Resources */,
-				B2F49F5D20906F9700D03620 /* 盗墓笔记第5卷 下谜海归巢 .txt in Resources */,
 				B2F49F2420906A0800D03620 /* Main.storyboard in Resources */,
 				B21043B220AD6665009806FF /* 全职高手-精校.txt in Resources */,
 				B2F49F5B20906F9700D03620 /* 盗墓笔记第1卷 七星鲁王 .txt in Resources */,
-				B2F49F5A20906F9700D03620 /* 盗墓笔记第5卷 上蛇沼鬼城 .txt in Resources */,
-				B2F49F5F20906F9700D03620 /* 盗墓笔记第4卷 云顶天宫 .txt in Resources */,
-				B2F49F5E20906F9700D03620 /* 盗墓笔记第3卷 秦岭神树 .txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
