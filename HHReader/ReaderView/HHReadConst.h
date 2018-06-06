@@ -20,12 +20,12 @@
 
 #define UpdateProgressNotification @"UpdateProgressNotification"
 #define ChangeFontSizeNotification @"ChangeFontSizeNotification"
-#define ChangeThemeColorNotification @"ChangeThemeColorNotifications"
-#define ChapterListNotification @"ChapterListNotification"
 #define NightModelNotification @"NightModelNotification"
-#define ChapterListNotification @"ChapterListNotification"
+#define ChangeThemeColorNotification @"ChangeThemeColorNotifications"
+
 #define ReadBackNotification @"ReadBackNotification"
 #define SearchNotification @"SearchNotification"
+#define ChapterListNotification @"ChapterListNotification"
 #define BookMarkNotification @"BookMarkNotification"
 
 // 保存当前阅读记录的章节和页号
