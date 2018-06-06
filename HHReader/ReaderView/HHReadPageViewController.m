@@ -61,8 +61,7 @@
     
     [self addChildViewController:self.pageViewController];
     [self.pageViewController setViewControllers:@[self.readViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-    
-//    [self addChapterListView];
+    // 添加手势
     [self addTap];
     // 调整字体大小
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontSizeChange:) name:ChangeFontSizeNotification object:nil];
@@ -70,12 +69,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nightModel:) name:NightModelNotification object:nil];
     // 显示章节列表
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chapterList:) name:ChapterListNotification object:nil];
-    //  返回
+    // 返回
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(readBack:) name:ReadBackNotification object:nil];
-    // 更细进度
+    // 更新进度
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateProgress:) name:UpdateProgressNotification object:nil];
-    //  搜索
+    // 搜索
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchContent:) name:SearchNotification object:nil];
+    // 更多
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setMore:) name:MoreNotification object:nil];
 
 }
 
@@ -85,6 +86,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ChapterListNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ReadBackNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UpdateProgressNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SearchNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MoreNotification object:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -100,18 +103,15 @@
 #pragma mark -
 
 - (void)addChapterListView {
+
     listView = [HHReadChapterListView sharedInstance];
     listView.readModel = self.dataModel;
-    
     listView.delegate = self;
 //    [self.view addSubview:listView];
     
     [HHReadChapterListView show];
     
     listView.currentChapter = _chapter;
-    
-
-    
 }
 
 - (void)addTap {
@@ -161,7 +161,7 @@
     NSUInteger random = slider.value;
     _chapter = random;
     _page = 0;
-    
+    // 更新进度
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
@@ -169,7 +169,7 @@
     [self recordReadChapter:_chapter page:_page bookId:self.dataModel.bookId];
 }
 
-#pragma mark -  updateProgress
+#pragma mark -  更改进度
 
 - (void)updateProgress:(NSNotification *)sender {
     //  添加滑动进度条
@@ -178,20 +178,6 @@
     [self.view addSubview:self.slider];
 }
 
-- (UISlider *)slider {
-    if (!_slider) {
-        _slider = [[UISlider alloc] initWithFrame:CGRectMake(0, CGRectGetMinY(_bottomView.frame) - 44, self.view.bounds.size.width, 44)];
-        _slider.minimumValue = 0;
-        [_slider setThumbImage:[UIImage imageNamed:@"MoreSetting-SliderUnselectedCircle"] forState:UIControlStateNormal];
-        [_slider setThumbImage:[UIImage imageNamed:@"MoreSetting-SliderSelectedCircle"] forState:UIControlStateSelected];
-        [_slider setMinimumTrackImage:[UIImage imageNamed:@"MoreSetting-SliderBold"] forState:UIControlStateNormal];
-        [_slider setMaximumTrackImage:[UIImage imageNamed:@"MoreSetting-SliderThin"] forState:UIControlStateNormal];
-        [_slider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];
-
-    }
-    
-    return _slider;
-}
 #pragma mark -  改变字体大小
 
 - (void)fontSizeChange:(NSNotification *)sender {
@@ -217,8 +203,20 @@
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
-    //    [HHReadConfig shareInstance].fontColor = [UIColor whiteColor];
+    // [HHReadConfig shareInstance].fontColor = [UIColor whiteColor];
 
+}
+
+#pragma mark - 更多自动翻页
+
+- (void)setMore:(NSNotification *)sender {
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        self->_page += 1;
+        HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[self->_chapter];
+        self->_readViewController.currentPage = self->_page;
+        self->_readViewController.currentChapterModel = chapterModel;
+    }];
+    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 #pragma mark - 搜索
@@ -238,14 +236,13 @@
     _readViewController.currentChapterModel = chapterModel;
 }
 
-
 #pragma mark - readBack
 
 - (void)readBack:(NSNotification *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - chapterList
+#pragma mark - 章节列表
 
 - (void)chapterList:(NSNotification *)sender {
     [self addChapterListView];
@@ -274,11 +271,8 @@
 #pragma mark - UIPageViewControllerDelegate
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
+    // 保存阅读进度
     [self recordReadChapter:_chapter page:_page bookId:self.dataModel.bookId];
-}
-
-- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewControllers {
-    
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -287,8 +281,7 @@
     
     _readViewController = [[HHReadViewController alloc] init];;
     _readViewController.currentModel = self.dataModel;
-//    NSUInteger index = arc4random()%1000;
-        
+    
     if (_page > 0) {
         _page -= 1;
     }else if (_page <= 0) {
@@ -362,7 +355,6 @@
 
 - (UIPageViewController *)pageViewController {
     if (!_pageViewController) {
-        
         _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
         _pageViewController.delegate = self;
         _pageViewController.dataSource = self;
@@ -384,19 +376,22 @@
     return _readViewController;
 }
 
+- (UISlider *)slider {
+    if (!_slider) {
+        _slider = [[UISlider alloc] initWithFrame:CGRectMake(0, CGRectGetMinY(_bottomView.frame) - 44, self.view.bounds.size.width, 44)];
+        _slider.minimumValue = 0;
+        [_slider setThumbImage:[UIImage imageNamed:@"MoreSetting-SliderUnselectedCircle"] forState:UIControlStateNormal];
+        [_slider setThumbImage:[UIImage imageNamed:@"MoreSetting-SliderSelectedCircle"] forState:UIControlStateSelected];
+        [_slider setMinimumTrackImage:[UIImage imageNamed:@"MoreSetting-SliderBold"] forState:UIControlStateNormal];
+        [_slider setMaximumTrackImage:[UIImage imageNamed:@"MoreSetting-SliderThin"] forState:UIControlStateNormal];
+        [_slider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];
+    }
+    return _slider;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

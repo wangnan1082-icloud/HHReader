@@ -22,6 +22,7 @@
 #define ChangeFontSizeNotification @"ChangeFontSizeNotification"
 #define NightModelNotification @"NightModelNotification"
 #define ChangeThemeColorNotification @"ChangeThemeColorNotifications"
+#define MoreNotification @"MoreNotification"
 
 #define ReadBackNotification @"ReadBackNotification"
 #define SearchNotification @"SearchNotification"

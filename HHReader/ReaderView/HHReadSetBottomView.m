@@ -164,6 +164,7 @@
 
 - (void)setMoreButtonClick:(UIButton *)sender {
     //  更多设置
+    [[NSNotificationCenter defaultCenter] postNotificationName:MoreNotification object:RandomColor];
 }
 
 /*
