@@ -28,6 +28,7 @@
     HHReadSetHeaderView *_headerView;
     HHReadSetBottomView *_bottomView;
     HHReadChapterListView *listView;
+    NSTimer *_autoPagingTimer;
 }
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 /// 当前阅读视图
@@ -207,16 +208,35 @@
 
 }
 
-#pragma mark - 更多自动翻页
+#pragma mark - 更多-自动翻页
 
 - (void)setMore:(NSNotification *)sender {
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer * _Nonnull timer) {
-        self->_page += 1;
-        HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[self->_chapter];
-        self->_readViewController.currentPage = self->_page;
-        self->_readViewController.currentChapterModel = chapterModel;
-    }];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    if (_autoPagingTimer) {
+        [_autoPagingTimer setFireDate:[NSDate distantFuture]];
+        [_autoPagingTimer invalidate];
+        _autoPagingTimer = nil;
+        return;
+    }
+    _autoPagingTimer = [NSTimer timerWithTimeInterval:2 target:self selector:@selector(autoPagingTimer:) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_autoPagingTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)autoPagingTimer:(NSTimer *)timer {
+    // 如果超过总章节数 则直接返回当前页
+    if (self->_chapter > self.dataModel.chapterListArr.count -1) {
+        [timer invalidate];
+        timer = nil;
+        return;
+    }else if (self->_chapter == self.dataModel.chapterListArr.count -1) {
+        // 最后一章时 最后一页时 停止
+        HHReadChapterModel *chapterModel = self.dataModel.chapterListArr.lastObject;
+        if (self->_page == chapterModel.chapterPageCount - 1) {
+            [timer invalidate];
+            timer = nil;
+            return;
+        }
+    }
+    [self goToNextPage];
 }
 
 #pragma mark - 搜索
@@ -314,10 +334,14 @@
         _readViewController.currentChapterModel = chapterModel;
         return _readViewController;
     }
-    
+
+    [self goToNextPage];
+    return _readViewController;
+}
+
+- (void)goToNextPage {
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _page += 1;
-
     // 如果超过当前章节的总页数，则进入下一章
     if (_page > chapterModel.chapterPageCount -1) {
         // 最后一章时，最后一页不变
@@ -332,11 +356,12 @@
         }
     }
     currentChapterModel = chapterModel;
-
+    
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
     
-    return _readViewController;
+    // 保存阅读进度
+    [self recordReadChapter:_chapter page:_page bookId:self.dataModel.bookId];
 }
 
 #pragma mark - 记录阅读章节和页号
