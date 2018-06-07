@@ -35,7 +35,7 @@ NSString *const listCellId = @"listCellId";
 
 - (void)addRightNavButton {
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightBtn.frame = CGRectMake(0, 0, 50, 40);
+    rightBtn.frame = CGRectMake(0, 0, 100, 40);
     [rightBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [rightBtn setTitle:@"WiFi传书" forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(rightNavBtnCLick:) forControlEvents:UIControlEventTouchUpInside];
