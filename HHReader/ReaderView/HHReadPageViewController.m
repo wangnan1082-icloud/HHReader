@@ -385,7 +385,6 @@
         _pageViewController.dataSource = self;
         [self.view addSubview:_pageViewController.view];
     }
-    
     return _pageViewController;
 }
 
