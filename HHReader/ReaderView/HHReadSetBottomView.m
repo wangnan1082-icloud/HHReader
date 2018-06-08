@@ -97,7 +97,7 @@
 
 - (UIButton *)brightChange {
     if (!_brightChange) {
-        _brightChange = [HHReadTool createButtonWithTarget:self selecter:@selector(brightChangeButtonClick:) image:[UIImage imageNamed:@"Bottom-Light"] selectedImage:[UIImage imageNamed:@"Bottom-Light"]];
+        _brightChange = [HHReadTool createButtonWithTarget:self selecter:@selector(brightChangeButtonClick:) image:[UIImage imageNamed:@"Bottom-Auto"] selectedImage:[UIImage imageNamed:@"Bottom-Auto"]];
     }
     return _brightChange;
 }
@@ -154,7 +154,11 @@
 }
 
 - (void)brightChangeButtonClick:(UIButton *)sender {
+    CGRect frame = sender.frame;
+    NSDictionary *dic = @{@"key":[NSValue valueWithCGRect:frame]};
     //  亮度调整
+    [[NSNotificationCenter defaultCenter] postNotificationName:ChangeBrightNotification object:dic];
+
 }
 
 - (void)themeColorButtonClick:(UIButton *)sender {

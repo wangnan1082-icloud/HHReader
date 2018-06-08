@@ -15,7 +15,7 @@
 
 #import "HHReadSetHeaderView.h"
 #import "HHReadSetBottomView.h"
-
+#import "HHReadSetView.h"
 #import "NSString+Range.h"
 
 @interface HHReadPageViewController ()<UIPageViewControllerDelegate, UIPageViewControllerDataSource, HHReadChapterListViewDelegate>
@@ -28,15 +28,15 @@
     HHReadSetHeaderView *_headerView;
     HHReadSetBottomView *_bottomView;
     HHReadChapterListView *listView;
-    NSTimer *_autoPagingTimer;
+    __block NSTimer *_autoPagingTimer;
+    __block NSUInteger _auotPagingTime;
 }
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 /// 当前阅读视图
 @property (nonatomic, strong) HHReadViewController *readViewController;
-
 /// 下一页阅读视图
 @property (nonatomic, strong) HHReadViewController *nextReadViewController;
-
+///  阅读数据模型
 @property (nonatomic, strong) HHReadModel *dataModel;
 ///  调整整体进度
 @property (nonatomic, strong) UISlider *slider;
@@ -64,6 +64,13 @@
     [self.pageViewController setViewControllers:@[self.readViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
     // 添加手势
     [self addTap];
+    // 添加通知
+    [self addNotify];
+    
+    [self initAutoPagingTime];
+}
+
+- (void)addNotify {
     // 调整字体大小
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontSizeChange:) name:ChangeFontSizeNotification object:nil];
     // 调整夜间模式
@@ -78,7 +85,18 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchContent:) name:SearchNotification object:nil];
     // 更多
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setMore:) name:MoreNotification object:nil];
+    // 改变亮度
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeBright:) name:ChangeBrightNotification object:nil];
+    
+}
 
+- (void)initAutoPagingTime {
+    NSNumber *num = [[NSUserDefaults standardUserDefaults] valueForKey:AutoPagingTime];
+    if (num.integerValue > 0) {
+        _auotPagingTime = num.integerValue;
+    }else {
+        _auotPagingTime = 5;
+    }
 }
 
 - (void)dealloc {
@@ -89,6 +107,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UpdateProgressNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SearchNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MoreNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ChangeBrightNotification object:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -104,14 +123,10 @@
 #pragma mark -
 
 - (void)addChapterListView {
-
     listView = [HHReadChapterListView sharedInstance];
     listView.readModel = self.dataModel;
     listView.delegate = self;
-//    [self.view addSubview:listView];
-    
     [HHReadChapterListView show];
-    
     listView.currentChapter = _chapter;
 }
 
@@ -122,7 +137,6 @@
 
 - (void)tap:(UITapGestureRecognizer *)sender {
     if (self.dataModel) {
-//        [HHReadChapterListView show];
         
         if (!_headerView) {
             _headerView = [[HHReadSetHeaderView alloc] initWithFrame:CGRectMake(0, -44, self.view.bounds.size.width, 44)];
@@ -133,7 +147,6 @@
             [UIView animateWithDuration:0.5 animations:^{
                 _headerView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 44);
             }];
-            
             
         }else {
             [_headerView removeFromSuperview];
@@ -196,29 +209,68 @@
     
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
-    
 }
 
 - (void)nightModel:(NSNotification *)sender {
-    
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
     // [HHReadConfig shareInstance].fontColor = [UIColor whiteColor];
+}
 
+#pragma mark - 改变亮度
+
+- (void)changeBright:(NSNotification *)sender {
+    NSDictionary *dic = sender.object;
+    NSValue *value = dic[@"key"];
+    CGRect frame = value.CGRectValue;
+    HHReadSetView *setView = [HHReadSetView sharedInstance];
+    setView.setType = HHReadSetTypeAutoReadSpeed;
+    setView.block = ^(NSDictionary *setValue) {
+        NSString *str = setValue[@"key"];
+        // 先停止定时器
+        [self stopTimer];
+        if ([str isEqualToString:AutoPagingTimeFaster]) {
+            self->_auotPagingTime -=1;
+            if (self->_auotPagingTime == 1) {
+                self->_auotPagingTime = 1;
+                [HHReadSetView dismiss];
+            }
+        }else if ([str isEqualToString:AutoPagingTimeSlower]) {
+            self->_auotPagingTime +=1;
+        }else if ([str isEqualToString:AutoPagingTimeStop]) {
+            [HHReadSetView dismiss];
+        }else if ([str isEqualToString:AutoPagingTimeStart]) {
+            [self addTimer];
+            [HHReadSetView dismiss];
+        }
+    };
+    [HHReadSetView show];
+    
+    setView.showFrame = frame;
 }
 
 #pragma mark - 更多-自动翻页
 
 - (void)setMore:(NSNotification *)sender {
+    [self stopTimer];
+}
+
+- (void)stopTimer {
     if (_autoPagingTimer) {
         [_autoPagingTimer setFireDate:[NSDate distantFuture]];
         [_autoPagingTimer invalidate];
         _autoPagingTimer = nil;
         return;
     }
-    _autoPagingTimer = [NSTimer timerWithTimeInterval:2 target:self selector:@selector(autoPagingTimer:) userInfo:nil repeats:YES];
+}
+
+- (void)addTimer {
+    [self stopTimer];
+    _autoPagingTimer = [NSTimer timerWithTimeInterval:_auotPagingTime target:self selector:@selector(autoPagingTimer:) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_autoPagingTimer forMode:NSRunLoopCommonModes];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:_auotPagingTime] forKey:AutoPagingTime];
 }
 
 - (void)autoPagingTimer:(NSTimer *)timer {
@@ -228,7 +280,7 @@
         timer = nil;
         return;
     }else if (self->_chapter == self.dataModel.chapterListArr.count -1) {
-        // 最后一章时 最后一页时 停止
+        // 最后一章 最后一页时 停止
         HHReadChapterModel *chapterModel = self.dataModel.chapterListArr.lastObject;
         if (self->_page == chapterModel.chapterPageCount - 1) {
             [timer invalidate];
@@ -256,7 +308,7 @@
     _readViewController.currentChapterModel = chapterModel;
 }
 
-#pragma mark - readBack
+#pragma mark - 返回
 
 - (void)readBack:(NSNotification *)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -271,18 +323,15 @@
 #pragma mark - HHReadChapterListViewDelegate
 
 - (void)chapterListViewDidSelectedIndex:(NSInteger)index {
-    
-//    NSLog(@"选中了 %@ 章", @(index));
     [HHReadChapterListView dismiss];
     if (index > self.dataModel.chapterListArr.count) {
         return;
     }
-    
     _chapter = index;
     _page = 0;
-
+    // 保存阅读记录
     [self recordReadChapter:_chapter page:_page bookId:self.dataModel.bookId];
-    
+    // 显示内容
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;

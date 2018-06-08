@@ -31,7 +31,6 @@
     if (url.path.length == 0) {
         NSAssert(url.path.length == 0, @"文件路径不存在");
     }
-    
     NSString *key = [url.path lastPathComponent];
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     if (!data) {
@@ -51,8 +50,6 @@
                 [self saveReadModel:model bookId:bookId];
             }
             return model;
-        }else if ([[key pathExtension] isEqualToString:@"epub"]){
-            NSLog(@"this is epub");
         } else{
             @throw [NSException exceptionWithName:@"FileException" reason:@"文件格式错误" userInfo:nil];
         }
@@ -81,7 +78,6 @@
     HHReadModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     return model;
 }
-
 
 - (BOOL)isExistPathWithBookId:(NSString *)bookId {
     NSFileManager *fileManager = [NSFileManager defaultManager];

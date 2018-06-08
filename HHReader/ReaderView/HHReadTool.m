@@ -51,12 +51,7 @@
 }
 
 + (void)subSeparateChapter:(NSMutableArray *__autoreleasing *)chapters content:(NSString *)content bookId:(NSString *)bookId  {
-    /*
-     old:   @"第[0-9一二三四五六七八九十百千]*[章回].*[ ]";
-     new:   @"【?第[0-9一二三四五六七八九十百千]*[章回]】?[ ].*[\n]";
-     
-     其他：   ^.{0,6}(第[0-9一两二三四五六七八九十零百千]{1,6}(章|节|集|卷|部|篇|回)|楔子|前言|引子)([ \s\:]{0,2}|：)([^\s]{0,36})$
-     */
+    
     NSString *parten = @"第[0-9零一二三四五六七八九十百千万]*[章回集卷部篇][ ].*";
     NSError *error = NULL;
     NSRegularExpression *reg = [NSRegularExpression regularExpressionWithPattern:parten options:NSRegularExpressionCaseInsensitive error:&error];
@@ -67,7 +62,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%lu", (unsigned long)match.count] forKey:[NSString stringWithFormat:@"%@-ToTalChapter", bookId]];
         
         [match enumerateObjectsUsingBlock:^(NSTextCheckingResult *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {            
-            NSLog(@"归档 ---  %@/%@", @(idx), @(match.count));
+//            NSLog(@"归档 ---  %@/%@", @(idx), @(match.count));
             NSRange range = [obj range];
             NSInteger local = range.location;
             if (idx == 0) {

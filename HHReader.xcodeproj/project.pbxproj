@@ -10,6 +10,7 @@
 		4125F381BFBEFD508E7142D0 /* libPods-HHReaderUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6F781B125AB5B0B941A0A2 /* libPods-HHReaderUITests.a */; };
 		5FE1BFC2488E0DD92C5884C2 /* libPods-HHReaderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C970B93150EC8D00D654C40D /* libPods-HHReaderTests.a */; };
 		B203ACC020AD7505008A6A0F /* HHReadChapterListView.m in Sources */ = {isa = PBXBuildFile; fileRef = B203ACBF20AD7505008A6A0F /* HHReadChapterListView.m */; };
+		B204F9D120C912E30024B97C /* HHReadSetView.m in Sources */ = {isa = PBXBuildFile; fileRef = B204F9D020C912E30024B97C /* HHReadSetView.m */; };
 		B2074BAC20A9380A00AB06A5 /* HHReadPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2074BAB20A9380A00AB06A5 /* HHReadPageView.m */; };
 		B2074BAF20A9727E00AB06A5 /* HHReadParser.m in Sources */ = {isa = PBXBuildFile; fileRef = B2074BAE20A9727E00AB06A5 /* HHReadParser.m */; };
 		B20D48C120BBFE20000DB6F4 /* HHReadSetHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B20D48C020BBFE20000DB6F4 /* HHReadSetHeaderView.m */; };
@@ -61,6 +62,8 @@
 		9A6A893DF0E0214AF58D1619 /* Pods-HHReader.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HHReader.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HHReader/Pods-HHReader.debug.xcconfig"; sourceTree = "<group>"; };
 		B203ACBE20AD7505008A6A0F /* HHReadChapterListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadChapterListView.h; sourceTree = "<group>"; };
 		B203ACBF20AD7505008A6A0F /* HHReadChapterListView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadChapterListView.m; sourceTree = "<group>"; };
+		B204F9CF20C912E30024B97C /* HHReadSetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadSetView.h; sourceTree = "<group>"; };
+		B204F9D020C912E30024B97C /* HHReadSetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadSetView.m; sourceTree = "<group>"; };
 		B2074BAA20A9380A00AB06A5 /* HHReadPageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadPageView.h; sourceTree = "<group>"; };
 		B2074BAB20A9380A00AB06A5 /* HHReadPageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadPageView.m; sourceTree = "<group>"; };
 		B2074BAD20A9727E00AB06A5 /* HHReadParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadParser.h; sourceTree = "<group>"; };
@@ -241,6 +244,8 @@
 				B2421C3120B4124B004663CB /* HHReadSetBottomView.m */,
 				B20D48BF20BBFE20000DB6F4 /* HHReadSetHeaderView.h */,
 				B20D48C020BBFE20000DB6F4 /* HHReadSetHeaderView.m */,
+				B204F9CF20C912E30024B97C /* HHReadSetView.h */,
+				B204F9D020C912E30024B97C /* HHReadSetView.m */,
 				B220CC9A20A5306500577A5E /* HHReadTool.h */,
 				B220CC9B20A5306500577A5E /* HHReadTool.m */,
 				B2F49F632090773100D03620 /* HHReadViewController.h */,
@@ -566,6 +571,7 @@
 				B2421C3220B4124B004663CB /* HHReadSetBottomView.m in Sources */,
 				B2F49F2120906A0800D03620 /* ViewController.m in Sources */,
 				B203ACC020AD7505008A6A0F /* HHReadChapterListView.m in Sources */,
+				B204F9D120C912E30024B97C /* HHReadSetView.m in Sources */,
 				B220CC9C20A5306500577A5E /* HHReadTool.m in Sources */,
 				B20EE94820B6AB3E0079B949 /* HHReadConfig.m in Sources */,
 				B2074BAC20A9380A00AB06A5 /* HHReadPageView.m in Sources */,

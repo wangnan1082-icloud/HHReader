@@ -22,6 +22,7 @@
 #define ChangeFontSizeNotification @"ChangeFontSizeNotification"
 #define NightModelNotification @"NightModelNotification"
 #define ChangeThemeColorNotification @"ChangeThemeColorNotifications"
+#define ChangeBrightNotification @"ChangeBrightNotification"
 #define MoreNotification @"MoreNotification"
 
 #define ReadBackNotification @"ReadBackNotification"
@@ -32,5 +33,13 @@
 // 保存当前阅读记录的章节和页号
 #define BookMarkChapter @"BookMarkChapter"
 #define BookMarkPage @"BookMarkPage"
+
+// 自动翻页
+#define AutoPagingTimeFaster @"变快"
+#define AutoPagingTimeSlower @"变慢"
+#define AutoPagingTimeStop @"停止"
+#define AutoPagingTimeStart @"开始"
+
+#define AutoPagingTime @"AutoPagingTime"
 
 #endif /* HHReadConst_h */

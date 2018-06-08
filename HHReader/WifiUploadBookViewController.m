@@ -19,7 +19,6 @@
     UILabel *_label;
     GCDWebUploader* _webServer;
 }
-
 @end
 
 @implementation WifiUploadBookViewController
@@ -60,16 +59,15 @@
     //  @"doc", @"docx", @"xls", @"xlsx", @"pdf", @"png", @"jpg", @"jpeg"
     _webServer.allowedFileExtensions = @[@"txt"];
     // 设置网页标题
-    _webServer.title = @"HHReader";
+    _webServer.title = @"花花阅读";
     // 设置展示在网页上的文字(开场白)
     _webServer.prologue = @"拖拽文件到窗口或者点击“上传书籍”按钮选择您要上传的书籍，上传完成后就可以在书架上看到您上传的书啦，赶紧上传吧！";
-    _webServer.footer = @"HHReader 1.0";
+    _webServer.footer = @"花花阅读 1.0";
     if ([_webServer start]) {
         _label.text = [NSString stringWithFormat:@"确保电脑与手机在同一WiFi网络下\n在电脑浏览器地址栏输入\n http://%@:%zd/", [IPTool deviceIPAdress], _webServer.port];
     } else {
         _label.text = NSLocalizedString(@"GCDWebServer not running!", nil);
     }
-    
     NSLog(@"documentsPath:    %@",documentsPath);
 }
 
@@ -82,51 +80,39 @@
 #pragma mark -
 
 - (void)setGCDWebServer{
-    
     _webServer = [[GCDWebServer alloc] init];
     _webServer.delegate = self;
-    
     // POST
     [_webServer addHandlerForMethod:@"POST"
                                path:@"/connection" //请求路径
                        requestClass:[GCDWebServerDataRequest class]
                        processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
-                           
-                           //   NSLog(@"jsonObject:%@",[(GCDWebServerDataRequest *)request jsonObject]);//获取 post 的请求体body
-                           //   NSString* deviceName = [[(GCDWebServerDataRequest*)request jsonObject] objectForKey:@"deviceName"];
-                           //   NSString* deviceuuid = [[(GCDWebServerDataRequest*)request jsonObject] objectForKey:@"uuid"];
-                           
                            NSLog(@"query:%@",[request query]); ////获取请求的 query
                            NSString* deviceName = [[request query] objectForKey:@"deviceName"];
                            NSString* deviceuuid = [[request query] objectForKey:@"uuid"];
                            
-                           NSLog(@"remoteAddressString:%@",[(GCDWebServerRequest *)request remoteAddressString]);//远程IP
-                           NSLog(@"localAddressString:%@",[(GCDWebServerRequest *)request localAddressString]);//本地IP
+                           NSLog(@"remoteAddressString:%@",[(GCDWebServerRequest *)request remoteAddressString]);   // 远程IP
+                           NSLog(@"localAddressString:%@",[(GCDWebServerRequest *)request localAddressString]); // 本地IP
                            NSLog(@"path:%@",[(GCDWebServerRequest *)request path]);//请求路径
-                           
                            return [GCDWebServerDataResponse responseWithJSONObject:@{@"status":@"1"}];
                        }];
     
-    
-    //GET
+    // GET
     [_webServer addHandlerForMethod:@"GET"
                                path:@"/status" //请求路径
                        requestClass:[GCDWebServerRequest class]
                        processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
                            NSLog(@"%@",[request query]);
-                           
-                           //16位的MD5 IDFV
-                           NSString *MD5Bit16IDFV = [NSString stringWithFormat:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
-                           //[NSString getMd5_16Bit_String:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
-                           //返回 Json 信息
+                           // 16位的MD5 IDFV
+                           NSString *MD5Bit16IDFV = [NSString stringWithFormat:@"%@", [[[UIDevice currentDevice] identifierForVendor] UUIDString]];
+                           // 返回 Json 信息
                            return [GCDWebServerDataResponse responseWithJSONObject:@{@"username":@"App name", @"uid":@"App uid", @"os":@"ios", @"mac":MD5Bit16IDFV}];
                        }];
     
-    // Start server on port 9526   端口号:9526
+    // 启动服务   端口号:5678
     [_webServer startWithPort:[@"5678" integerValue] bonjourName:nil];
     NSLog(@"Visit %@ in your web browser", _webServer.serverURL);
 }
-
 
 #pragma mark -
 
@@ -135,21 +121,20 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:[fileManager contentsOfDirectoryAtPath:string error:nil]];
     
-    NSLog(@"[arr] %@", arr);
-    
-    NSLog(@"[UPLOAD] %@", path);
+//    NSLog(@"[arr] %@", arr);
+//    NSLog(@"[UPLOAD] %@", path);
 }
 
 - (void)webUploader:(GCDWebUploader*)uploader didMoveItemFromPath:(NSString*)fromPath toPath:(NSString*)toPath {
-    NSLog(@"[MOVE] %@ -> %@", fromPath, toPath);
+//    NSLog(@"[MOVE] %@ -> %@", fromPath, toPath);
 }
 
 - (void)webUploader:(GCDWebUploader*)uploader didDeleteItemAtPath:(NSString*)path {
-    NSLog(@"[DELETE] %@", path);
+//    NSLog(@"[DELETE] %@", path);
 }
 
 - (void)webUploader:(GCDWebUploader*)uploader didCreateDirectoryAtPath:(NSString*)path {
-    NSLog(@"[CREATE] %@", path);
+//    NSLog(@"[CREATE] %@", path);
 }
 
 - (void)didReceiveMemoryWarning {
