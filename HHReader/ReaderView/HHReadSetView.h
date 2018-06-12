@@ -4,7 +4,7 @@
 //
 //  Created by 王楠 on 2018/6/7.
 //  Copyright © 2018年 王楠. All rights reserved.
-//
+//  设置选择View
 
 #import <UIKit/UIKit.h>
 

@@ -61,10 +61,26 @@
         // 保存总章节数
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%lu", (unsigned long)match.count] forKey:[NSString stringWithFormat:@"%@-ToTalChapter", bookId]];
         
-        [match enumerateObjectsUsingBlock:^(NSTextCheckingResult *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {            
+        CGFloat topSpace = 0;
+        CGFloat bottomSpace = 0;
+        CGRect rect = [UIScreen mainScreen].bounds;
+//        if (@available(iOS 11.0, *)) {
+//            if (rect.size.height == 618) {
+//                topSpace = 44;
+//                bottomSpace = 34;
+//            }
+//        }
+        rect.origin.x += 20;
+        rect.origin.y += StatusBarHeight + 40 + topSpace;
+        rect.size.width -= 40;
+        rect.size.height -= StatusBarHeight + 80 + topSpace + bottomSpace;
+        
+
+        [match enumerateObjectsUsingBlock:^(NSTextCheckingResult *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //            NSLog(@"归档 ---  %@/%@", @(idx), @(match.count));
             NSRange range = [obj range];
             NSInteger local = range.location;
+            
             if (idx == 0) {
                 HHReadChapterModel *model = [[HHReadChapterModel alloc] init];
                 model.chapterTitle = @"开始";
@@ -75,11 +91,6 @@
                 model.chapterContent = typeSetContent;
                 model.chapterId = [NSString stringWithFormat:@"%lu", (unsigned long)idx];
                 
-                CGRect rect = [UIScreen mainScreen].bounds;
-                rect.origin.x += 20;
-                rect.origin.y += StatusBarHeight + 40;
-                rect.size.width -= 40;
-                rect.size.height -= StatusBarHeight + 80;
                 NSArray *arr = [self getChapterCountContent:typeSetContent rect:rect];
                 model.chapterPageCount = arr.count;
                 
@@ -95,11 +106,6 @@
                 model.chapterContent = typeSetContent;
                 model.chapterId = [NSString stringWithFormat:@"%lu", (unsigned long)idx];
                 
-                CGRect rect = [UIScreen mainScreen].bounds;
-                rect.origin.x += 20;
-                rect.origin.y += StatusBarHeight + 40;
-                rect.size.width -= 40;
-                rect.size.height -= StatusBarHeight + 80;
                 NSArray *arr = [self getChapterCountContent:typeSetContent rect:rect];
                 model.chapterPageCount = arr.count;
                 
@@ -115,11 +121,6 @@
                 model.chapterContent = typeSetContent;
                 model.chapterId = [NSString stringWithFormat:@"%lu", (unsigned long)idx];
                 
-                CGRect rect = [UIScreen mainScreen].bounds;
-                rect.origin.x += 20;
-                rect.origin.y += StatusBarHeight + 40;
-                rect.size.width -= 40;
-                rect.size.height -= StatusBarHeight + 80;
                 NSArray *arr = [self getChapterCountContent:typeSetContent rect:rect];
                 model.chapterPageCount = arr.count;
                 

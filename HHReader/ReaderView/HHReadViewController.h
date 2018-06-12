@@ -19,4 +19,6 @@
 @property (nonatomic, strong) HHReadChapterModel *currentChapterModel; /**< 当前章节的数据*/
 @property (nonatomic, assign) NSInteger currentPage; /**< 当前的章节页*/
 
+- (void)configCurrentChapterModel:(HHReadChapterModel *)currentChapterModel;
+
 @end

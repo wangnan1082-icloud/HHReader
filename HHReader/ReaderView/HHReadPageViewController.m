@@ -29,7 +29,7 @@
     HHReadSetBottomView *_bottomView;
     HHReadChapterListView *listView;
     __block NSTimer *_autoPagingTimer;
-    __block NSUInteger _auotPagingTime;
+    __block NSUInteger _autoPagingTime;
 }
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 /// 当前阅读视图
@@ -93,9 +93,9 @@
 - (void)initAutoPagingTime {
     NSNumber *num = [[NSUserDefaults standardUserDefaults] valueForKey:AutoPagingTime];
     if (num.integerValue > 0) {
-        _auotPagingTime = num.integerValue;
+        _autoPagingTime = num.integerValue;
     }else {
-        _auotPagingTime = 5;
+        _autoPagingTime = 5;
     }
 }
 
@@ -108,6 +108,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SearchNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MoreNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ChangeBrightNotification object:nil];
+    _autoPagingTimer = nil;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -137,15 +138,22 @@
 
 - (void)tap:(UITapGestureRecognizer *)sender {
     if (self.dataModel) {
+
+        __block CGFloat ViewHeight = 44;
         
+        if (@available(iOS 11.0, *)) {
+            if ([UIScreen mainScreen].bounds.size.height == 812) {
+                ViewHeight = 100;
+            }
+        }
         if (!_headerView) {
-            _headerView = [[HHReadSetHeaderView alloc] initWithFrame:CGRectMake(0, -44, self.view.bounds.size.width, 44)];
+            _headerView = [[HHReadSetHeaderView alloc] initWithFrame:CGRectMake(0, -ViewHeight, self.view.bounds.size.width, ViewHeight)];
             _headerView.readModel = self.dataModel;
             _headerView.currentChapter = _chapter;
             [self.view addSubview:_headerView];
 
             [UIView animateWithDuration:0.5 animations:^{
-                _headerView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 44);
+                _headerView.frame = CGRectMake(0, 0, self.view.bounds.size.width, ViewHeight);
             }];
             
         }else {
@@ -154,11 +162,11 @@
         }
         
         if (!_bottomView) {
-            _bottomView = [[HHReadSetBottomView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height + 44, self.view.bounds.size.width, 44)];
+            _bottomView = [[HHReadSetBottomView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height + ViewHeight, self.view.bounds.size.width, 44)];
             [self.view addSubview:_bottomView];
             
             [UIView animateWithDuration:0.5 animations:^{
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - 44, self.view.bounds.size.width, 44);
+                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - ViewHeight, self.view.bounds.size.width, ViewHeight);
             }];
         }else {
             [_bottomView removeFromSuperview];
@@ -197,11 +205,23 @@
 - (void)fontSizeChange:(NSNotification *)sender {
     
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
-    CGRect rect = [UIScreen mainScreen].bounds;
+
+    CGFloat topSpace = 0;
+    CGFloat bottomSpace = 0;
+    CGRect rect = self.view.bounds;
+    if (@available(iOS 11.0, *)) {
+        if (rect.size.height == 618) {
+            topSpace = 44;
+            bottomSpace = 34;
+        }
+    } else {
+        
+    }
     rect.origin.x += 20;
-    rect.origin.y += StatusBarHeight + 40;
+    rect.origin.y += StatusBarHeight + 40 + topSpace;
     rect.size.width -= 40;
-    rect.size.height -= StatusBarHeight + 80;
+    rect.size.height -= StatusBarHeight + 80 + topSpace + bottomSpace;
+    
     // 重新计算该章节的页数
     NSArray *arr = [HHReadTool getChapterCountContent:chapterModel.chapterContent rect:rect];
     chapterModel.chapterPageCount = arr.count;
@@ -209,12 +229,14 @@
     
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
+
 }
 
 - (void)nightModel:(NSNotification *)sender {
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
+
     // [HHReadConfig shareInstance].fontColor = [UIColor whiteColor];
 }
 
@@ -231,13 +253,13 @@
         // 先停止定时器
         [self stopTimer];
         if ([str isEqualToString:AutoPagingTimeFaster]) {
-            self->_auotPagingTime -=1;
-            if (self->_auotPagingTime == 1) {
-                self->_auotPagingTime = 1;
+            self->_autoPagingTime -=1;
+            if (self->_autoPagingTime == 1) {
+                self->_autoPagingTime = 1;
                 [HHReadSetView dismiss];
             }
         }else if ([str isEqualToString:AutoPagingTimeSlower]) {
-            self->_auotPagingTime +=1;
+            self->_autoPagingTime +=1;
         }else if ([str isEqualToString:AutoPagingTimeStop]) {
             [HHReadSetView dismiss];
         }else if ([str isEqualToString:AutoPagingTimeStart]) {
@@ -267,10 +289,10 @@
 
 - (void)addTimer {
     [self stopTimer];
-    _autoPagingTimer = [NSTimer timerWithTimeInterval:_auotPagingTime target:self selector:@selector(autoPagingTimer:) userInfo:nil repeats:YES];
+    _autoPagingTimer = [NSTimer timerWithTimeInterval:_autoPagingTime target:self selector:@selector(autoPagingTimer:) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_autoPagingTimer forMode:NSRunLoopCommonModes];
     
-    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:_auotPagingTime] forKey:AutoPagingTime];
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:_autoPagingTime] forKey:AutoPagingTime];
 }
 
 - (void)autoPagingTimer:(NSTimer *)timer {
@@ -306,6 +328,7 @@
     chapterModel.searchContent = searchContent;
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
+
 }
 
 #pragma mark - 返回
@@ -335,6 +358,7 @@
     HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
     _readViewController.currentPage = _page;
     _readViewController.currentChapterModel = chapterModel;
+
 }
 
 #pragma mark - UIPageViewControllerDelegate
@@ -367,6 +391,7 @@
         HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
         _readViewController.currentPage = _page;
         _readViewController.currentChapterModel = chapterModel;
+
     }
     
     return _readViewController;
@@ -381,6 +406,7 @@
         HHReadChapterModel *chapterModel = self.dataModel.chapterListArr[_chapter];
         _readViewController.currentPage = _page;
         _readViewController.currentChapterModel = chapterModel;
+
         return _readViewController;
     }
 
@@ -445,6 +471,7 @@
         _readViewController.currentPage = _page;
         HHReadChapterModel *chapterModel = (HHReadChapterModel *)_dataModel.chapterListArr[_chapter];
         _readViewController.currentChapterModel = chapterModel;
+
     }
     return _readViewController;
 }

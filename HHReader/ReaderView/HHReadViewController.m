@@ -16,7 +16,10 @@
 #import "HHReadConfig.h"
 
 @interface HHReadViewController ()
- 
+{
+    CGFloat topSpace;
+    CGFloat bottomSpace;
+}
 @property (nonatomic, strong) UILabel *titleLabel;   /**< 用于显示书名或者章节名*/
 @property (nonatomic, strong) UILabel *pageLabel;   /**< 用于显示每一章的当前页和总页数*/
 @property (nonatomic, strong) UILabel *sysTimeLabel;   /**< 用于显示系统时间*/
@@ -28,13 +31,38 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = [HHReadConfig shareInstance].themeColor;
+    topSpace = 0;
+    bottomSpace = 0;
     
+    self.view.backgroundColor = [HHReadConfig shareInstance].themeColor;
     [self addReadView];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeColor:) name:ChangeThemeColorNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nightModel:) name:NightModelNotification object:nil];
     
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    if (@available(iOS 11.0, *)) {
+        self.view.insetsLayoutMarginsFromSafeArea = YES;
+        topSpace = self.view.safeAreaInsets.top;
+        bottomSpace = self.view.safeAreaInsets.bottom;
+    } else {
+        
+    }
+    
+    CGRect rect = [self getRect];
+    self.readView.frame = rect;
+    
+    self.titleLabel.frame = CGRectMake(20, StatusBarHeight + 20 + topSpace, self.view.bounds.size.width - 40, 20);
+    
+    CGFloat pageLabelWidth = 80;
+    self.pageLabel.frame = CGRectMake(self.view.bounds.size.width - pageLabelWidth - 20, CGRectGetMaxY(self.readView.frame), pageLabelWidth, 20);
+    self.sysTimeLabel.frame = CGRectMake(20, CGRectGetMaxY(self.readView.frame), pageLabelWidth, 20);
+
+    [self configCurrentChapterModel:self.currentChapterModel];
 }
 
 - (void)dealloc {
@@ -55,21 +83,36 @@
     self.view.backgroundColor = [HHReadConfig shareInstance].themeColor;
 }
 
+- (CGRect)getRect {
+    CGRect rect = self.view.bounds;
+    rect.origin.x += 20;
+    rect.origin.y += StatusBarHeight + 40 + topSpace;
+    rect.size.width -= 40;
+    rect.size.height -= StatusBarHeight + 80 + topSpace + bottomSpace;
+    return rect;
+}
+
 #pragma mark - 
 
 - (void)addReadView {
-    CGRect rect = self.view.bounds;
-    rect.origin.x += 20;
-    rect.origin.y += StatusBarHeight + 40;
-    rect.size.width -= 40;
-    rect.size.height -= StatusBarHeight + 80;
+    
+    if (@available(iOS 11.0, *)) {
+        self.view.insetsLayoutMarginsFromSafeArea = YES;
+        topSpace = self.view.safeAreaInsets.top;
+        bottomSpace = self.view.safeAreaInsets.bottom;
+    } else {
+        
+    }
+    
+    CGRect rect = [self getRect];
     self.readView = [[HHReadPageView alloc] initWithFrame:rect];
     [self.view addSubview:self.readView];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, StatusBarHeight + 20, self.view.bounds.size.width - 40, 20)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, StatusBarHeight + 20 + topSpace, self.view.bounds.size.width - 40, 20)];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.titleLabel];
     
+
     CGFloat pageLabelWidth = 80;
     self.pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - pageLabelWidth - 20, CGRectGetMaxY(self.readView.frame), pageLabelWidth, 20)];
     self.pageLabel.textAlignment = NSTextAlignmentRight;
@@ -82,25 +125,26 @@
     self.sysTimeLabel.font = [UIFont systemFontOfSize:15];
     self.sysTimeLabel.textColor = [UIColor blueColor];
     [self.view addSubview:self.sysTimeLabel];
-    
 }
 
 #pragma mark -
 
-- (void)setCurrentChapterModel:(HHReadChapterModel *)currentChapterModel {
-    _currentChapterModel = currentChapterModel;
+- (void)configCurrentChapterModel:(HHReadChapterModel *)currentChapterModel {
     
-    CGRect rect = self.view.bounds;
-    rect.origin.x += 20;
-    rect.origin.y += StatusBarHeight + 40;
-    rect.size.width -= 40;
-    rect.size.height -= StatusBarHeight + 80;
-    
-    self.readView.frameRef = nil;
+    if (@available(iOS 11.0, *)) {
+        self.view.insetsLayoutMarginsFromSafeArea = YES;
+        topSpace = self.view.safeAreaInsets.top;
+        bottomSpace = self.view.safeAreaInsets.bottom;
+    } else {
+        
+    }
+    CGRect rect = [self getRect];
 
+    self.readView.frameRef = nil;
+    
     NSArray *arr = [HHReadTool getChapterCountContent:currentChapterModel.chapterContent rect:rect];
     NSString *content = [HHReadTool stringOfPage:self.currentPage content:currentChapterModel.chapterContent chapterPageArray:arr];
-        
+    
     CTFrameRef temp = [HHReadParser parserContent:content searchContent:currentChapterModel.searchContent bouds:CGRectMake(0, 0, rect.size.width, rect.size.height)];
     
     self.readView.frameRef = temp;
@@ -121,6 +165,13 @@
 
 }
 
+#pragma mark -
+
+- (void)setCurrentChapterModel:(HHReadChapterModel *)currentChapterModel {
+    _currentChapterModel = currentChapterModel;
+    [self configCurrentChapterModel:currentChapterModel];
+}
+
 - (NSString *)getCurrentTime {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
@@ -135,15 +186,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
