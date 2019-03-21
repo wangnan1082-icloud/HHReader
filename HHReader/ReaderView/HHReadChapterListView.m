@@ -23,7 +23,7 @@
 @end
 
 NSString *const HHReadChapterListViewCellID = @"HHReadChapterListViewCellId";
-NSUInteger const TopSpaceValue  = 0;
+CGFloat const percentNum = 0.67;
 
 @implementation HHReadChapterListView
 
@@ -64,23 +64,33 @@ NSUInteger const TopSpaceValue  = 0;
     if (self.tableView) {
         return;
     }
-    [self addSubview:self.searchBar];
-    self.searchBar.delegate = self;
-
-    CGFloat topSpace = 44;
-    CGFloat tableViewHeight = self.frame.size.height - topSpace;
-    _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, topSpace, self.frame.size.width*2/3, tableViewHeight)];
-    _contentView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:_contentView];
     
-    _tapView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_contentView.frame), 0, self.frame.size.width/3, tableViewHeight)];
+    CGFloat topSpace = 44;
+    CGFloat bottomSpace = 44;
+    if (@available(iOS 11.0, *)) {
+        CGFloat topPadding = _window.safeAreaInsets.top;
+        CGFloat bottomPadding = _window.safeAreaInsets.bottom;
+        topSpace = topPadding;
+        bottomSpace = bottomPadding;
+    }
+    
+    CGFloat tableViewHeight = self.frame.size.height - topSpace - bottomSpace;
+    _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, topSpace, self.frame.size.width*percentNum, tableViewHeight)];
+    _contentView.backgroundColor = [UIColor whiteColor];
+    _contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addSubview:_contentView];
+    // 添加搜索框
+    [_contentView addSubview:self.searchBar];
+    self.searchBar.delegate = self;
+    
+    _tapView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_contentView.frame), topSpace, self.frame.size.width/3, tableViewHeight)];
     _tapView.backgroundColor = [UIColor clearColor];
     [self addSubview:_tapView];;
-    
+    // 添加手势
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
     [_tapView addGestureRecognizer:tap];
-    
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, TopSpaceValue, _contentView.frame.size.width, _contentView.frame.size.height - TopSpaceValue) style:UITableViewStylePlain];
+    // 章节列表
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, topSpace, _contentView.frame.size.width, _contentView.frame.size.height - topSpace) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
@@ -233,7 +243,7 @@ NSUInteger const TopSpaceValue  = 0;
         _searchBar = [[UISearchBar alloc] init];
         _searchBar.placeholder = @"搜索";
         _searchBar.keyboardType = UIReturnKeySearch;
-        _searchBar.frame = CGRectMake(0, 0, self.frame.size.width, 44);
+        _searchBar.frame = CGRectMake(0, 0, self.frame.size.width*percentNum, 44);
         _searchBar.barTintColor = RGBColor(238, 238, 238, 1);
         _searchBar.backgroundImage = [[UIImage alloc] init];
     }

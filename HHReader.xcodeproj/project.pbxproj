@@ -759,7 +759,7 @@
 				DEVELOPMENT_TEAM = VZ4Y6T48FB;
 				GCC_PREFIX_HEADER = HHReader/PrefixHeader.pch;
 				INFOPLIST_FILE = HHReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -779,7 +779,7 @@
 				DEVELOPMENT_TEAM = VZ4Y6T48FB;
 				GCC_PREFIX_HEADER = HHReader/PrefixHeader.pch;
 				INFOPLIST_FILE = HHReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

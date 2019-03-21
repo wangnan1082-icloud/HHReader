@@ -1,9 +1,9 @@
 //
-//  HHReadPageViewController.m
-//  HHReader
+// HHReadPageViewController.m
+// HHReader
 //
-//  Created by 王楠 on 2018/4/25.
-//  Copyright © 2018年 王楠. All rights reserved.
+// Created by 王楠 on 2018/4/25.
+// Copyright © 2018年 王楠. All rights reserved.
 //
 
 #import "HHReadPageViewController.h"
@@ -36,9 +36,9 @@
 @property (nonatomic, strong) HHReadViewController *readViewController;
 /// 下一页阅读视图
 @property (nonatomic, strong) HHReadViewController *nextReadViewController;
-///  阅读数据模型
+/// 阅读数据模型
 @property (nonatomic, strong) HHReadModel *dataModel;
-///  调整整体进度
+/// 调整整体进度
 @property (nonatomic, strong) UISlider *slider;
 
 @end
@@ -121,7 +121,7 @@
     return YES;
 }
 
-#pragma mark -
+#pragma mark - 添加章节列表
 
 - (void)addChapterListView {
     listView = [HHReadChapterListView sharedInstance];
@@ -131,6 +131,8 @@
     listView.currentChapter = _chapter;
 }
 
+#pragma mark -
+
 - (void)addTap {
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self.view addGestureRecognizer:tap];
@@ -138,35 +140,49 @@
 
 - (void)tap:(UITapGestureRecognizer *)sender {
     if (self.dataModel) {
-
-        __block CGFloat ViewHeight = 44;
-        
-        if (@available(iOS 11.0, *)) {
-            if ([UIScreen mainScreen].bounds.size.height == 812) {
-                ViewHeight = 100;
-            }
-        }
         if (!_headerView) {
-            _headerView = [[HHReadSetHeaderView alloc] initWithFrame:CGRectMake(0, -ViewHeight, self.view.bounds.size.width, ViewHeight)];
+            _headerView = [[HHReadSetHeaderView alloc] initWithFrame:CGRectZero];
             _headerView.readModel = self.dataModel;
             _headerView.currentChapter = _chapter;
             [self.view addSubview:_headerView];
+            _headerView.translatesAutoresizingMaskIntoConstraints = NO;
 
+            UILayoutGuide *layoutGuide;
+            if (@available(iOS 11.0, *)) {
+                // 约束添加到安全区域内
+                layoutGuide = self.view.safeAreaLayoutGuide;
+            } else {
+                layoutGuide = self.view.layoutMarginsGuide;
+            }
             [UIView animateWithDuration:0.5 animations:^{
-                _headerView.frame = CGRectMake(0, 0, self.view.bounds.size.width, ViewHeight);
+                [self->_headerView.topAnchor constraintEqualToAnchor:layoutGuide.topAnchor].active = YES;
+                [self->_headerView.leftAnchor constraintEqualToAnchor:layoutGuide.leftAnchor].active = YES;
+                [self->_headerView.rightAnchor constraintEqualToAnchor:layoutGuide.rightAnchor].active = YES;
+                [self->_headerView.heightAnchor constraintEqualToConstant:44].active = YES;
             }];
-            
         }else {
+            // 再次点击时，移除
             [_headerView removeFromSuperview];
             _headerView = nil;
         }
         
         if (!_bottomView) {
-            _bottomView = [[HHReadSetBottomView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height + ViewHeight, self.view.bounds.size.width, 44)];
+            _bottomView = [[HHReadSetBottomView alloc] initWithFrame:CGRectZero];
             [self.view addSubview:_bottomView];
-            
+            _bottomView.translatesAutoresizingMaskIntoConstraints = NO;
+
+            UILayoutGuide *layoutGuide;
+            if (@available(iOS 11.0, *)) {
+                // 约束添加到安全区域内
+                layoutGuide = self.view.safeAreaLayoutGuide;
+            } else {
+                layoutGuide = self.view.layoutMarginsGuide;
+            }
             [UIView animateWithDuration:0.5 animations:^{
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - ViewHeight, self.view.bounds.size.width, ViewHeight);
+                [self->_bottomView.bottomAnchor constraintEqualToAnchor:layoutGuide.bottomAnchor].active = YES;
+                [self->_bottomView.leftAnchor constraintEqualToAnchor:layoutGuide.leftAnchor].active = YES;
+                [self->_bottomView.rightAnchor constraintEqualToAnchor:layoutGuide.rightAnchor].active = YES;
+                [self->_bottomView.heightAnchor constraintEqualToConstant:44].active = YES;
             }];
         }else {
             [_bottomView removeFromSuperview];
@@ -194,7 +210,7 @@
 #pragma mark -  更改进度
 
 - (void)updateProgress:(NSNotification *)sender {
-    //  添加滑动进度条
+    // 添加滑动进度条
     self.slider.maximumValue = self.dataModel.chapterListArr.count - 1;
     self.slider.value = _chapter;
     [self.view addSubview:self.slider];

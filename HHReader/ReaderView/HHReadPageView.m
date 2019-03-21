@@ -16,16 +16,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];
-//        [self addGestureRecognizer:({
-//            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-//            longPress;
-//        })];
-//        [self addGestureRecognizer:({
-//            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-//            pan.enabled = NO;
-//            pan;
-//        })];
-        
     }
     return self;
 }
@@ -73,4 +63,5 @@
     CGContextScaleCTM(context, 1.0, -1.0);
     CTFrameDraw(_frameRef, context);
 }
+
 @end
