@@ -137,6 +137,11 @@ CGFloat const percentNum = 0.67;
         cell.textLabel.text = chapterModel.chapterTitle;
         cell.textLabel.font = [UIFont systemFontOfSize:14];
         cell.textLabel.numberOfLines = 2;
+        cell.textLabel.textColor = [UIColor blackColor];
+        // 设置当前章为蓝色
+        if (indexPath.row == _currentChapter) {
+            cell.textLabel.textColor = [UIColor blueColor];
+        }
     }
     return cell;
 }

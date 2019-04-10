@@ -64,18 +64,12 @@
         CGFloat topSpace = 0;
         CGFloat bottomSpace = 0;
         CGRect rect = [UIScreen mainScreen].bounds;
-//        if (@available(iOS 11.0, *)) {
-//            if (rect.size.height == 618) {
-//                topSpace = 44;
-//                bottomSpace = 34;
-//            }
-//        }
+
         rect.origin.x += 20;
         rect.origin.y += StatusBarHeight + 40 + topSpace;
         rect.size.width -= 40;
         rect.size.height -= StatusBarHeight + 80 + topSpace + bottomSpace;
         
-
         [match enumerateObjectsUsingBlock:^(NSTextCheckingResult *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //            NSLog(@"归档 ---  %@/%@", @(idx), @(match.count));
             NSRange range = [obj range];
