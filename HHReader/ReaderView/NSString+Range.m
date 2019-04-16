@@ -11,7 +11,6 @@
 @implementation NSString (Range)
 
 - (NSArray <NSValue *> *)rangesOfString:(NSString *)searchString options:(NSStringCompareOptions)mask serachRange:(NSRange)range {
-    
     NSMutableArray *array = [NSMutableArray array];
     [self rangeOfString:searchString range:NSMakeRange(0, self.length) array:array options:mask];
     
@@ -26,9 +25,7 @@
         return;
     }
     NSRange range = [self rangeOfString:searchString options:mask range:searchRange];
-    
     if (range.location != NSNotFound) {
-        
         [array addObject:[NSValue valueWithRange:range]];
         [self rangeOfString:searchString
                       range:NSMakeRange(range.location + range.length, self.length - (range.location + range.length))

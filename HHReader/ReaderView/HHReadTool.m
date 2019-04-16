@@ -20,8 +20,7 @@
 
 #pragma mark - Init
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.pageArray = [NSMutableArray array];
@@ -51,7 +50,6 @@
 }
 
 + (void)subSeparateChapter:(NSMutableArray *__autoreleasing *)chapters content:(NSString *)content bookId:(NSString *)bookId  {
-    
     NSString *parten = @"第[0-9零一二三四五六七八九十百千万]*[章回集卷部篇][ ].*";
     NSError *error = NULL;
     NSRegularExpression *reg = [NSRegularExpression regularExpressionWithPattern:parten options:NSRegularExpressionCaseInsensitive error:&error];
@@ -140,7 +138,7 @@
     }
     NSString *content = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
     if (!content) {
-        //  GB 18030
+        // GB 18030
         content = [NSString stringWithContentsOfURL:url encoding:0x80000632 error:nil];
     }
     if (!content) {

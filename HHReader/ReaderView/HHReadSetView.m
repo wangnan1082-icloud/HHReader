@@ -46,7 +46,7 @@ CGFloat const triangleWidth = 15;
     UIView *_contentView;
     UIImageView *_triangleImgView;
 }
-@property (nonatomic, strong) NSArray *setDataArray; /**< 数据数组*/
+@property (nonatomic, copy) NSArray *setDataArray; /**< 数据数组*/
 @property (nonatomic, strong) UICollectionView *collectionView; /**< collectionView*/
 
 @end

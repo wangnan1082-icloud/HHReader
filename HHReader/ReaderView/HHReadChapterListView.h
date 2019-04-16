@@ -21,7 +21,7 @@ typedef void(^HHReadChapterListViewSelectBlock)(NSInteger index, NSInteger searc
 @property (nonatomic, strong) HHReadModel *readModel; /**< 模型*/
 @property (nonatomic, assign) NSInteger currentChapter; /**< 当前章*/
 
-@property (nonatomic, strong) NSArray<HHReadChapterModel *> *searchChapterModelArray; /**< 搜索章节模型数组*/
+@property (nonatomic, copy) NSArray<HHReadChapterModel *> *searchChapterModelArray; /**< 搜索章节模型数组*/
 
 @property (nonatomic, weak) id<HHReadChapterListViewDelegate> delegate; /**< 代理*/
 @property (nonatomic, copy) HHReadChapterListViewSelectBlock block; /**< block*/
